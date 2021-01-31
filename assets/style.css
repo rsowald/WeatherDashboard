@@ -1,0 +1,32 @@
+body {
+    background-color: rgb(17, 94, 87);
+    margin: 0px;
+}
+
+header {
+    background-color: rgb(63, 68, 68);
+    height: 60px;
+    margin-bottom: 10px;
+}
+
+h1 {
+    text-align: center;
+    color: white;
+    padding: 5px;
+    margin: 0px;
+}
+
+h3 {
+    color: rgb(63, 68, 68);
+    padding-left: 10px;
+}
+
+.sidebar {
+    background-color: darkgray;
+    overflow-x: hidden;
+    padding-top: 50px;
+}
+
+.input-group {
+    padding: 10px;
+}
