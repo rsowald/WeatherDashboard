@@ -7,13 +7,16 @@ function getCurrentWeather() {
     var date = new Date();
     $.get(url, {
         q: cityName,
-        appid: apiKey
+        appid: apiKey,
+        units: "imperial"
     },
         function (data) {
             console.log(data);
-
-            $("#current-weather").append($("<h2>" + cityName + " (" + date.toLocaleDateString() + ")</h2>"))
-
+            var weatherIcon = "http://openweathermap.org/img/wn/" + data.weather[0].icon + "@2x.png"
+            $("#current-weather").append($("<h2>" + cityName + " (" + date.toLocaleDateString() + ")" + "<img src=" + weatherIcon + "></img></h2>"));
+            $("#current-weather").append($("<p>Temperature: " + data.main.temp + " °F</p>"));
+            $("#current-weather").append($("<p>Humidity: " + data.main.humidity + " %</p>"));
+            $("#current-weather").append($("<p>Wind Speed: " + data.wind.speed + " MPH</p>"));
         }
     );
 }
