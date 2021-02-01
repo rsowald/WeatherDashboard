@@ -22,15 +22,15 @@
                 <h3>Search for a City:</h3>
                 <div class="input-group input-group mb-3">
                     <input type="text" class="form-control" placeholder="City Name" aria-label="City Name Search"
-                        aria-describedby="button-addon2" id="cityName">
+                        aria-describedby="button-addon2" id="cityName" value="austin">
+                    <!-- todo: remove austin value and autofocus -->
                     <div class="input-group-append">
-                        <button class="btn btn-dark" type="submit" id="button-addon2"><i
-                                class="fas fa-search"></i></button>
+                        <button class="btn btn-dark" type="submit" id="button-addon2" autofocus><i class="fas fa-search" "></i></button>
                     </div>
                 </div>
-                <ul class="list-group" id="search-history">
-                    <!-- <li class="list-group-item">Cras justo odio</li> -->
-                </ul>
+                <ul class=" list-group" id="search-history">
+                                <!-- <li class="list-group-item">Cras justo odio</li> -->
+                                </ul>
             </aside>
             <div class="col-sm-9">
                 <div class="card">
@@ -39,6 +39,7 @@
                 </div>
                 <div class="card">
                     <div class="card-body row" id="5-day-forecast">
+                        <h2>5-Day Forecast:</h2>
                     </div>
                 </div>
             </div>
