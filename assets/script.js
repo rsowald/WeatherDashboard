@@ -5,16 +5,22 @@ function getCurrentWeather() {
     var url = "https://api.openweathermap.org/data/2.5/weather";
     var cityName = $("#cityName").val();
 
-    $.get(url, {
+    var currentConditionsRequest = {
         q: cityName,
         appid: apiKey,
         units: "imperial"
-    },
-        success
-    );
+    };
+
+    $.get(url, currentConditionsRequest)
+        .done(success)
+        .fail(error);
 }
 
-
+function error() {
+    console.log("error");
+    //todo:400 error from API - your error
+    //todo:500 error from API - API error
+}
 function success(data) {
     function displayCurrentConditions() {
         console.log(data);
