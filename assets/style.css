@@ -24,6 +24,7 @@ h3 {
     background-color: darkgray;
     overflow-x: hidden;
     padding-top: 50px;
+    padding-bottom: 20px;
 }
 
 .input-group {

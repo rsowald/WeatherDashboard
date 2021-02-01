@@ -27,7 +27,9 @@ function success(data) {
         $("#current-weather").append($("<p>Wind Speed: " + data.wind.speed + " MPH</p>"));
     }
     function addHistory() {
-        $(".list-group").append("<li>" + data.name + "</li>");
+        var newSearch = $("<li>" + data.name + "</li>");
+        newSearch.addClass("list-group-item");
+        $("#search-history").append(newSearch);
     }
     displayCurrentConditions();
     addHistory();
