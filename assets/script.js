@@ -65,8 +65,9 @@ $(document).ready(function () {
     }
     function onForecastSuccess(hourForecasts) {
         console.log(hourForecasts);
-        //these hourForecasts come in 3 hour blocks, so every 8th index is the same time on the next day
-        var dayForecasts = [hourForecasts.list[2], hourForecasts.list[10], hourForecasts.list[18], hourForecasts.list[26], hourForecasts.list[34]]
+        // check array of hours to find 1500 on each day
+        var dayForecasts = hourForecasts.list.filter(forecast => forecast.dt_txt.includes('15:00:00'));
+
         $("#5-day-forecast").empty();
         for (var i = 0; i < dayForecasts.length; i++) {
             var forecast = dayForecasts[i]
