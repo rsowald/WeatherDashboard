@@ -15,7 +15,7 @@ h1 {
     margin: 0px;
 }
 
-h3 {
+.sidebar h3 {
     color: rgb(63, 68, 68);
     padding-left: 10px;
 }
@@ -29,4 +29,13 @@ h3 {
 
 .input-group {
     padding: 10px;
+}
+
+.forecast h2 {
+    padding: 20px;
+}
+
+.forecastCard {
+    background-color: blue;
+    color: white;
 }
