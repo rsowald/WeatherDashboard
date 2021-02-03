@@ -1,17 +1,25 @@
 $(document).ready(function () {
 
     var apiKey = "d12a2200f8bbf27b2b5fa7c741e3a391";
-    ;
+    var currentConditionsApiUrl = "https://api.openweathermap.org/data/2.5/weather";
+    var forecastApiUrl = "https://api.openweathermap.org/data/2.5/forecast";
+    var searchHistory;
 
     function renderSearchHistory() {
         // Start with a clear list 
         $("#search-history").empty();
         // Render a new button for each city
-        var searchHistory = JSON.parse(localStorage.getItem("Searched Cities"))
+        searchHistory = JSON.parse(localStorage.getItem("Searched Cities"));
+
+        if (!searchHistory) {
+            searchHistory = [];
+        }
+
         for (var i = 0; i < searchHistory.length; i++) {
             var city = searchHistory[i];
 
             var button = $("<button></button>");
+            button.addClass("btn btn-outline-light");
             button.text(city);
 
             $("#search-history").append(button);
@@ -19,9 +27,6 @@ $(document).ready(function () {
     }
 
     function getCurrentWeather(cityName) {
-        var currentConditionsApiUrl = "https://api.openweathermap.org/data/2.5/weather";
-        var forecastApiUrl = "https://api.openweathermap.org/data/2.5/forecast";
-
         var weatherRequest = {
             q: cityName,
             appid: apiKey,
@@ -29,7 +34,7 @@ $(document).ready(function () {
         };
 
         $.get(currentConditionsApiUrl, weatherRequest)
-            .done(onCurrentConditionsSuccess)
+            .done(data => onCurrentConditionsSuccess(data, cityName))
             .fail(onCurrentConditionsError);
 
         $.get(forecastApiUrl, weatherRequest)
@@ -46,7 +51,7 @@ $(document).ready(function () {
         //todo:400 error from API - your error
         //todo:500 error from API - API error
     }
-    function onCurrentConditionsSuccess(data) {
+    function onCurrentConditionsSuccess(data, cityName) {
         function displayCurrentConditions() {
             console.log(data);
             var date = new Date();
@@ -60,22 +65,20 @@ $(document).ready(function () {
             $("#current-weather").append($("<p>Humidity: " + data.main.humidity + " %</p>"));
             $("#current-weather").append($("<p>Wind Speed: " + data.wind.speed + " MPH</p>"));
         }
-        function addHistory() {
-            var newSearch = $("<li>" + data.name + "</li>");
-            newSearch.addClass("list-group-item");
+        function addHistoryButton() {
+            var newSearch = $("<button>" + cityName + "</button>");
+            newSearch.addClass("btn btn-outline-light");
             $("#search-history").append(newSearch);
-            //todo: write to local storage
+
             //todo: only add to history if it's not already there
-            //todo: click event on history items to search for them
+
         }
         function storeHistory() {
-            var searchedCity = $("#cityName").val();
-            $("#cityName").val("");
-            searchHistory.push(searchedCity);
+            searchHistory.push(cityName);
             localStorage.setItem("Searched Cities", JSON.stringify(searchHistory))
         }
         displayCurrentConditions();
-        addHistory();
+        addHistoryButton();
         storeHistory();
     }
 
@@ -105,7 +108,9 @@ $(document).ready(function () {
 
     renderSearchHistory();
     $("#button-addon2").on("click", function () {
-        getCurrentWeather($("#cityName").val());
+        var cityName = $("#cityName").val();
+        $("#cityName").val("");
+        getCurrentWeather(cityName);
     });
     //todo: make enter also submit search
     $("#search-history").on("click", "button", function () {
