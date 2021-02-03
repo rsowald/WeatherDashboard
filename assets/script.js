@@ -1,13 +1,27 @@
 $(document).ready(function () {
 
     var apiKey = "d12a2200f8bbf27b2b5fa7c741e3a391";
+    ;
 
+    function renderSearchHistory() {
+        // Start with a clear list 
+        $("#search-history").empty();
+        // Render a new button for each city
+        var searchHistory = JSON.parse(localStorage.getItem("Searched Cities"))
+        for (var i = 0; i < searchHistory.length; i++) {
+            var city = searchHistory[i];
 
-    function getCurrentWeather() {
+            var button = $("<button></button>");
+            button.text(city);
+
+            $("#search-history").append(button);
+        }
+    }
+
+    function getCurrentWeather(cityName) {
         var currentConditionsApiUrl = "https://api.openweathermap.org/data/2.5/weather";
         var forecastApiUrl = "https://api.openweathermap.org/data/2.5/forecast";
-        var cityName = $("#cityName").val();
-        $("#cityName").val("");
+
         var weatherRequest = {
             q: cityName,
             appid: apiKey,
@@ -24,7 +38,7 @@ $(document).ready(function () {
     }
 
     // function getWeatherIcon{
-    //     //todo: extract this from onCurrentConditionsSuccess
+    //     //todo: extract this from onCurrentConditionsSuccess and onForecastSuccess
     // }
 
     function onCurrentConditionsError() {
@@ -54,8 +68,15 @@ $(document).ready(function () {
             //todo: only add to history if it's not already there
             //todo: click event on history items to search for them
         }
+        function storeHistory() {
+            var searchedCity = $("#cityName").val();
+            $("#cityName").val("");
+            searchHistory.push(searchedCity);
+            localStorage.setItem("Searched Cities", JSON.stringify(searchHistory))
+        }
         displayCurrentConditions();
         addHistory();
+        storeHistory();
     }
 
     function onForecastError() {
@@ -82,8 +103,13 @@ $(document).ready(function () {
         }
     }
 
-
-    $("#button-addon2").on("click", getCurrentWeather);
+    renderSearchHistory();
+    $("#button-addon2").on("click", function () {
+        getCurrentWeather($("#cityName").val());
+    });
     //todo: make enter also submit search
+    $("#search-history").on("click", "button", function () {
+        getCurrentWeather($(this).text());
+    });
 
 });
