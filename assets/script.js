@@ -3,19 +3,18 @@ $(document).ready(function () {
     var apiKey = "d12a2200f8bbf27b2b5fa7c741e3a391";
     var currentConditionsApiUrl = "https://api.openweathermap.org/data/2.5/weather";
     var forecastApiUrl = "https://api.openweathermap.org/data/2.5/forecast";
-
+    //declare searchHistory as a global variable so it can be used different ways in multiple functions
     var searchHistory;
 
     function renderSearchHistory() {
         // Start with a clear list 
         $("#search-history").empty();
-        // Render a new button for each city
         searchHistory = JSON.parse(localStorage.getItem("Searched Cities"));
         //make button only if it is not already in history list
         if (!searchHistory) {
             searchHistory = [];
         }
-
+        // Render a new button for each city
         for (var i = 0; i < searchHistory.length; i++) {
             var city = searchHistory[i];
             var button = $("<button></button>");
@@ -24,8 +23,9 @@ $(document).ready(function () {
             $("#search-history").append(button);
         }
     }
-
+    //function to call two main APIs
     function getCurrentWeather(cityName) {
+        //both APIs use the same query data, so set it as var
         var weatherRequest = {
             q: cityName,
             appid: apiKey,
@@ -45,10 +45,17 @@ $(document).ready(function () {
     //     //TODO: extract this from onCurrentConditionsSuccess and onForecastSuccess
     // }
 
-    function onCurrentConditionsError() {
+    function onCurrentConditionsError(Response) {
         console.log("error");
-        // TODO: 400 error from API - your error
-        //TODO:500 error from API - API error
+        if (Response.status >= 400 && Response.status < 500) {
+            alert("There is something wrong with your city name. Please try again.")
+        }
+        else if (Response.status >= 500 && Response.status < 600) {
+            alert("There is a problem getting your results. Please try again later.")
+        }
+        else {
+            alert("There is an unknown error. Please try again later.")
+        }
     }
     function onCurrentConditionsSuccess(data, cityName) {
         function displayCurrentConditions() {
@@ -61,7 +68,8 @@ $(document).ready(function () {
                 appid: apiKey
             }
             var uvIndex = "https://api.openweathermap.org/data/2.5/onecall"
-
+            //new API call to OneCall API for uvData and display data
+            //because of asynchronous operations, uvData will still appear last in the list because it will take the most time
             $.get(uvIndex, weatherRequest)
                 .done(uvData => {
                     $("#current-weather").append($("<p>UV Index: <span id='uvIndex'>" + uvData.current.uvi + "</span></p>"));
@@ -83,42 +91,44 @@ $(document).ready(function () {
                     }
                 })
                 .fail(error => console.log(error));
-            //TODO: alert errors
+            //also display all other data from first current weather API call
             $("#current-weather").empty();
             $("#current-weather").append($("<h2>" + data.name + " (" + date.toLocaleDateString() + ")" + "<img src=" + weatherIcon + "></img></h2>"));
             $("#current-weather").append($("<p>Temperature: " + data.main.temp + " °F</p>"));
             $("#current-weather").append($("<p>Humidity: " + data.main.humidity + " %</p>"));
             $("#current-weather").append($("<p>Wind Speed: " + data.wind.speed + " MPH</p>"));
         }
+
         function addHistoryButton() {
             var newSearch = $("<button>" + cityName + "</button>");
             newSearch.addClass("btn btn-outline-light");
             $("#search-history").append(newSearch);
         }
+
         function storeHistory() {
             searchHistory.push(cityName);
             localStorage.setItem("Searched Cities", JSON.stringify(searchHistory))
         }
 
         displayCurrentConditions();
-
+        //only save new searches in local storage if they are not already there
         if (!searchHistory.includes(cityName)) {
             addHistoryButton();
             storeHistory();
         }
     }
-
+    //not alerting this error because user does not need 2 alerts that the same information doesn't work
     function onForecastError() {
         console.log("error");
-        //TODO:400 error from API - your error
-        //TODO:500 error from API - API error
     }
+
     function onForecastSuccess(hourForecasts) {
         console.log(hourForecasts);
         // check array of hours to find 1500 on each day
         var dayForecasts = hourForecasts.list.filter(forecast => forecast.dt_txt.includes('15:00:00'));
 
         $("#5-day-forecast").empty();
+        //display data for each day at 1500 in a new card
         for (var i = 0; i < dayForecasts.length; i++) {
             var forecast = dayForecasts[i]
             var date = new Date(forecast.dt_txt).toLocaleDateString();
@@ -131,14 +141,16 @@ $(document).ready(function () {
             $("#5-day-forecast").append(card);
         }
     }
-
+    //these functions run as soon as document is ready
     renderSearchHistory();
+
     $("#button-addon2").on("click", function (event) {
         event.preventDefault();
         var cityName = $("#cityName").val();
         $("#cityName").val("");
         getCurrentWeather(cityName);
     });
+
     $("#search-history").on("click", "button", function () {
         getCurrentWeather($(this).text());
 
