@@ -93,7 +93,7 @@ $(document).ready(function () {
                 .fail(error => console.log(error));
             //also display all other data from first current weather API call
             $("#current-weather").empty();
-            $("#current-weather").append($("<h2>" + data.name + " (" + date.toLocaleDateString() + ")" + "<img src=" + weatherIcon + "></img></h2>"));
+            $("#current-weather").append($("<h3>" + data.name + " (" + date.toLocaleDateString() + ")" + "<img src=" + weatherIcon + "></img></h3>"));
             $("#current-weather").append($("<p>Temperature: " + data.main.temp + " °F</p>"));
             $("#current-weather").append($("<p>Humidity: " + data.main.humidity + " %</p>"));
             $("#current-weather").append($("<p>Wind Speed: " + data.wind.speed + " MPH</p>"));
@@ -136,7 +136,7 @@ $(document).ready(function () {
             var temp = forecast.main.temp;
             var humidity = forecast.main.humidity;
             var card = $("<div class='card forecastCard'></div>");
-            card.append("<h3>" + date + "</h3>");
+            card.append("<h4>" + date + "</h4>");
             card.append("<p class='card-text'>" + "<img src=" + weatherIcon + "></img><br>Temp: " + temp + "°F<br>Humidity: " + humidity + "%</p>");
             $("#5-day-forecast").append(card);
         }

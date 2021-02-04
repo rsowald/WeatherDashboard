@@ -25,10 +25,17 @@ h1 {
     overflow-x: hidden;
     padding-top: 50px;
     padding-bottom: 20px;
+    border-bottom-right-radius: 5px;
+    border-top-right-radius: 5px;
 }
 
 .input-group {
     padding: 10px;
+}
+
+.current h2 {
+    padding-top: 20px;
+    padding-left: 20px;
 }
 
 .forecast h2 {
