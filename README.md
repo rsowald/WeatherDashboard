@@ -20,3 +20,9 @@ As more searches are performed, more buttons are added to the search history sid
 ## Future Features
 - I would like to use a different API for this dashboard because, while OpenWeather does provide a lot of information, it is not always the most accurate. For example, because it does not require even a country, you might mean to look up weather in Alexandria, VA, USA but instead get results for Alexandria, Egypt.
 - Possibly include a reset button for the search history list if the user feels like it is getting too long or they no longer have any interest in that city's weather.
+
+## Contact
+Renae Sowald - renaesowald@gmail.com
+
+## License
+[MIT](LICENSE)
